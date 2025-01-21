@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Zoom and Scroll</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden; /* Prevent default scrollbars */
+      font-family: Arial, sans-serif;
+    }
+    body{
+      background-color: rgb(30, 30, 30);
+
+    }
+
+    .zoom-container {
+      background-color: rgb(255, 255, 255);
+      position: relative;
+      z-index: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      transform-origin: 0 0; /* Set origin for scaling */
+    }
+    .sticky{
+      /* position: static; */
+      position: fixed;
+      z-index: 9999999;
+
+      font-family : arial; font-size: 16px; background-color: rgb(44, 44, 44); color: rgb(228, 228, 228); text-align: center; vertical-align: middle; padding: 16px; margin: 0px; height: 100%; width: 15%; border-style:solid ; border-width:1px; border-radius: 0%;
+      border-color: rgb(66, 66, 66);
+
+    }
+    .sticky1{
+      /* position: static; */
+      position: fixed;
+      z-index: 9999999;
+      right: 0;
+      font-family : arial; font-size: 16px; background-color: rgb(44, 44, 44); color: rgb(228, 228, 228); text-align: center; vertical-align: middle; padding: 16px; margin: 0px; height: 100%; width: 15%; border-style:solid ; border-width:1px; border-radius: 0%;
+      border-color: rgb(66, 66, 66);
+    }
+
+
+    .box{
+      font-family : arial; font-size: 16px; background-color: #ffffff; color: #ff1010; text-align: center; vertical-align: middle; padding: 16px; margin: 16px; height: 5px; width: 10px; border-style:solid ; border-width:1px; border-radius: 0%;
+    }
+  </style>
+</head>
+<body>
+  <div class="sticky">layers</div>
+  <div class="sticky1">propertys</div>
+  <div class="zoom-container" id="zoomContainer">
+    <div class="box">hello</div>
+   
+  
+  </div>
+  <div class="box">[partha]</div>
+
+  <script>
+    const zoomContainer = document.getElementById('zoomContainer');
+    let scale = 1; // Initial zoom scale
+    let translateX = 0;
+    let translateY = 0;
+
+    let scrollX = 0; // Horizontal scroll position
+    let scrollY = 0; // Vertical scroll position
+
+    // Prevent default browser zoom behavior and handle custom zoom/scroll
+    window.addEventListener('wheel', (event) => {
+      if (event.ctrlKey) {
+        event.preventDefault(); // Stop browser zoom
+        customZoom(event); // Call custom zoom function
+      } else {
+        customScroll(event); // Handle vertical or horizontal scrolling
+      }
+    }, { passive: false }); // Allow preventDefault to work
+
+    function customZoom(event) {
+      // Calculate zoom factor
+      const zoomFactor = event.deltaY < 0 ? 1.1 : 0.9;
+
+      // Get cursor position relative to the zoom container
+      const rect = zoomContainer.getBoundingClientRect();
+      const cursorX = event.clientX - rect.left;
+      const cursorY = event.clientY - rect.top;
+
+      // Adjust scale and translation
+      const newScale = scale * zoomFactor;
+      translateX = cursorX - ((cursorX - translateX) * (newScale / scale));
+      translateY = cursorY - ((cursorY - translateY) * (newScale / scale));
+      scale = newScale;
+
+      // Apply transformations
+      zoomContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    function customScroll(event) {
+      event.preventDefault(); // Prevent default scroll behavior
+
+      if (event.shiftKey) {
+        // Shift + Scroll: Horizontal scrolling
+        scrollX += event.deltaY;
+      } else {
+        // Normal Scroll: Vertical scrolling
+        scrollY += event.deltaY;
+      }
+
+      // Apply scroll positions
+      zoomContainer.style.transform = `
+        translate(${translateX - scrollX}px, ${translateY - scrollY}px) scale(${scale})`;
+    }
+  </script>
+</body>
+</html>

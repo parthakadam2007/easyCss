@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Header Designer with Inline CSS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Set a clean font for the page */
+            margin: 20px; /* Add margin around the body */
+        }
+
+        .header {
+            width: 100%; /* The header spans the full width */
+            min-height: 150px; /* Minimum height for the header */
+            background-color: #f4f4f4; /* Light gray background for the header */
+            padding: 20px; /* Padding inside the header */
+            position: relative; /* Enables absolutely positioned children */
+        }
+
+        .draggable {
+            position: absolute; /* Enables positioning within the parent container */
+            cursor: grab; /* Shows the draggable cursor */
+        }
+
+        .draggable:active {
+            cursor: grabbing; /* Change cursor while dragging */
+        }
+
+        .shape {
+            background-color: #007BFF; /* Default blue background for shapes */
+            color: white; /* White text color for contrast */
+            display: flex; /* Flexbox for centering content */
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Center text inside shapes */
+        }
+
+        textarea#output {
+            width: 100%; /* Full-width textarea */
+            height: 300px; /* Fixed height for the textarea */
+            font-family: monospace; /* Monospace font for code readability */
+            margin-top: 20px; /* Space above the textarea */
+            font-size: 14px; /* Font size for the code */
+            padding: 10px; /* Inner padding for better visibility */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        #controls {
+            margin-top: 20px; /* Space above the controls */
+        }
+
+        .context-menu {
+            position: absolute; /* Context menu is absolutely positioned */
+            display: none; /* Hidden by default */
+            background-color: white; /* White background for visibility */
+            border: 1px solid #ccc; /* Light border for separation */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+           /* Subtle shadow for depth */
+
+            z-index: 1000; /* Ensures menu is on top of other elements */
+            padding: 10px; /* Space inside the menu */
+        }
+
+        .context-menu input[type="color"] {
+            margin-bottom: 5px; /* Space between inputs */
+            width: 100%; /* Full-width color input */
+        }
+
+        .context-menu button {
+            width: 100%; /* Full-width buttons */
+            padding: 5px; /* Inner padding for buttons */
+            margin-top: 5px; /* Space above each button */
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Header Designer with Inline CSS</h1>
+
+    <!-- Section to preview the header -->
+    <h3>Preview:</h3>
+    <div id="headerPreview" class="header">
+        <!-- Draggable and editable header title -->
+        <h1 class="draggable" contenteditable="true" style="top: 10px; left: 50px; font-size: 24px; font-weight: bold;">Header Title</h1>
+        <!-- Draggable and editable header subtitle -->
+        <p class="draggable" contenteditable="true" style="top: 60px; left: 50px; font-size: 16px;">Header Subtitle</p>
+    </div>
+
+    <!-- Buttons to add various shapes -->
+    <div id="controls">
+        <button onclick="addShape('circle')">Add Circle</button>
+        <button onclick="addShape('square')">Add Square</button>
+        <button onclick="addShape('rectangle')">Add Rectangle</button>
+        <button onclick="addShape('triangle')">Add Triangle</button>
+    </div>
+
+    <!-- Text area to display the generated HTML -->
+    <h3>Generated Header Code:</h3>
+    <textarea id="output" readonly></textarea>
+
+    <!-- Context menu for element customization -->
+    <div id="contextMenu" class="context-menu">
+        <!-- Background color picker -->
+        <label for="bgColor">Background Color:</label>
+        <input type="color" id="bgColor">
+        <!-- Text color picker -->
+        <label for="textColor">Text Color:</label>
+        <input type="color" id="textColor">
+        <!-- Apply color changes -->
+        <button onclick="applyColors()">Apply</button>
+        <!-- Set the selected element as a parent -->
+        <button onclick="setAsParent()">Set as Parent</button>
+        <!-- Set the selected element as a child of the parent -->
+        <button onclick="setAsChild()">Set as Child</button>
+    </div>
+
+    <script>
+        // Select the header preview and output text area
+        const headerPreview = document.getElementById('headerPreview');
+        const outputBox = document.getElementById('output');
+        const contextMenu = document.getElementById('contextMenu');
+        let targetElement = null; // Tracks the element being edited
+        let parentElement = null; // Tracks the parent element
+        let childElement = null; // Tracks the child element
+
+        // Update the output box with the generated HTML and inline CSS
+        function updateOutput() {
+            const elements = [...headerPreview.children];
+            console.log('elements',elements)
+            const headerContent = elements.map(el => {
+                const clone = el.cloneNode(true); // Clone the element
+                clone.removeAttribute('contenteditable'); // Remove editing capability
+                clone.style.position = 'absolute'; // Retain absolute positioning
+                return clone.outerHTML; // Convert to HTML string
+            }).join('\n    ');
+            console.log('headerCon',headerContent)
+
+            const headerStyle = `
+                width: 100%;
+                min-height: 150px;
+                background-color: #f4f4f4;
+                padding: 20px;
+                position: relative;
+            `.trim();
+
+            const generatedCode = `
+<header style="${headerStyle}">
+    ${headerContent}
+</header>`;
+            outputBox.value = generatedCode.trim(); // Display the code
+        }
+
+        // Function to add a shape
+        function addShape(type) {
+            const newShape = document.createElement('div'); // Create a new div
+            newShape.classList.add('draggable', 'shape'); // Add relevant classes
+            newShape.style.position = 'absolute'; // Set initial position
+            newShape.style.top = '50px';
+            newShape.style.left = '50px';
+
+            // Style the shape based on the type
+            if (type === 'circle') {
+                newShape.style.width = '50px';
+                newShape.style.height = '50px';
+                newShape.style.borderRadius = '50%'; // Make it a circle
+                newShape.style.backgroundColor = 'blue';
+            } else if (type === 'square') {
+                newShape.style.width = '50px';
+                newShape.style.height = '50px';
+                newShape.style.backgroundColor = 'blue';
+            } else if (type === 'rectangle') {
+                newShape.style.width = '100px';
+                newShape.style.height = '50px';
+                newShape.style.backgroundColor = 'blue';
+            } else if (type === 'triangle') {
+                newShape.style.width = '0';
+                newShape.style.height = '0';
+                newShape.style.borderLeft = '25px solid transparent';
+                newShape.style.borderRight = '25px solid transparent';
+                newShape.style.borderBottom = '50px solid blue';
+                newShape.style.backgroundColor = 'transparent';
+                
+            }
+
+            makeDraggable(newShape); // Make the shape draggable
+            headerPreview.appendChild(newShape); // Add to the preview
+            updateOutput(); // Update the output code
+        }
+
+        // Function to make an element draggable
+        function makeDraggable(el) {
+            el.addEventListener('mousedown', function (event) {
+                const offsetX = event.clientX - el.offsetLeft;
+                const offsetY = event.clientY - el.offsetTop;
+
+                function onMouseMove(e) {
+                    el.style.left = `${e.clientX - offsetX}px`;
+                    el.style.top = `${e.clientY - offsetY}px`;
+                    updateOutput();
+                }
+
+                function onMouseUp() {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+
+            // Show context menu on right-click
+            el.addEventListener('contextmenu', function (event) {
+                event.preventDefault(); // Prevent default menu
+                targetElement = el; // Set the target element
+                contextMenu.style.top = `${event.clientY}px`; // Position the menu
+                contextMenu.style.left = `${event.clientX}px`;
+                contextMenu.style.display = 'block'; // Show the menu
+            });
+        }
+
+        // Apply selected colors to the target element
+        function applyColors() {
+            if (targetElement) {
+                const bgColor = document.getElementById('bgColor').value;
+                const textColor = document.getElementById('textColor').value;
+                targetElement.style.backgroundColor = bgColor;
+                targetElement.style.color = textColor;
+                contextMenu.style.display = 'none';
+                updateOutput();
+            }
+        }
+
+        // Set the target element as the parent
+        function setAsParent() {
+            if (targetElement) {
+                parentElement = targetElement;
+                contextMenu.style.display = 'none';
+                alert('Element set as parent.');
+            }
+        }
+
+        // Set the target element as a child of the parent
+        function setAsChild() {
+            if (targetElement) {
+                childElement = targetElement;
+                if (parentElement) {
+                    parentElement.appendChild(childElement);
+                    childElement.style.position = 'absolute';
+                    contextMenu.style.display = 'none';
+                    alert('Element set as child of the selected parent.');
+                } else {
+                    alert('No parent element selected.');
+                }
+            }
+        }
+
+        // Hide the context menu when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!contextMenu.contains(e.target)) {
+                contextMenu.style.display = 'none';
+            }
+        });
+
+        // Make existing elements draggable
+        document.querySelectorAll('.draggable').forEach(makeDraggable);
+
+        // Update the output initially
+        updateOutput();
+    </script>
+</body>
+</html>
