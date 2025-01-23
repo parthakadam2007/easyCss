@@ -1,5 +1,6 @@
 "use strict";
-const box = document.querySelector('.box');
+const box = document.querySelector(".box");
+console.log("running");
 // Function to calculate offset for positioning
 function calculateOffset(element) {
     const position = element.getBoundingClientRect();
@@ -11,40 +12,40 @@ function calculateOffset(element) {
 // Function to add a sizer and corners around the box with resizing and moving functionality
 function logBoxPosition(box) {
     if (!box) {
-        console.error('Box element not found');
+        console.error("Box element not found");
         return;
     }
     const computedStyle = window.getComputedStyle(box);
-    const container = document.querySelector('.container');
+    const container = document.querySelector(".container");
     if (!container) {
-        console.error('Container element not found');
+        console.error("Container element not found");
         return;
     }
-    const sizer = document.createElement('div');
-    sizer.classList.add('sizer');
+    const sizer = document.createElement("div");
+    sizer.classList.add("sizer");
     container.appendChild(sizer);
     // Create a borderSizer for the main border
-    const borderSizer = document.createElement('div');
+    const borderSizer = document.createElement("div");
     sizer.appendChild(borderSizer);
     // Create four corner elements
     const corners = [];
     for (let i = 0; i < 4; i++) {
-        const corner = document.createElement('div');
-        corner.classList.add('sizerCorner');
-        corner.style.position = 'absolute';
-        corner.style.height = '15px';
-        corner.style.width = '15px';
-        corner.style.backgroundColor = 'white';
-        corner.style.cursor = 'pointer';
-        corner.style.border = '2px solid rgb(18, 143, 233)';
+        const corner = document.createElement("div");
+        corner.classList.add("sizerCorner");
+        corner.style.position = "absolute";
+        corner.style.height = "15px";
+        corner.style.width = "15px";
+        corner.style.backgroundColor = "white";
+        corner.style.cursor = "pointer";
+        corner.style.border = "2px solid rgb(18, 143, 233)";
         corners.push(corner);
         sizer.appendChild(corner);
     }
     // Style the sizer
-    borderSizer.style.position = 'absolute';
+    borderSizer.style.position = "absolute";
     borderSizer.style.height = computedStyle.height;
     borderSizer.style.width = computedStyle.width;
-    borderSizer.style.border = '2px solid rgb(18, 143, 233)';
+    borderSizer.style.border = "2px solid rgb(18, 143, 233)";
     // Use the calculateOffset function
     const offset = calculateOffset(box);
     borderSizer.style.left = `${offset.left}px`;
@@ -62,30 +63,6 @@ function logBoxPosition(box) {
     corners[3].style.top = `${offset.top + boxHeight - 7.5}px`;
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // let sizerCorner:null | Element= document.querySelector('.sizerCorner')
-    try {
-        let isDragging = false;
-        // Start drag
-        sizer.addEventListener('mousedown', function (event) {
-            isDragging = true;
-            console.log('Drag started at:', event.clientX, event.clientY);
-        });
-        // Dragging
-        document.addEventListener('mousemove', function (event) {
-            if (isDragging) {
-                console.log('Dragging at:', event.clientX, event.clientY);
-            }
-        });
-        // End drag
-        document.addEventListener('mouseup', function (event) {
-            if (isDragging) {
-                console.log('Drag ended at:', event.clientX, event.clientY);
-                isDragging = false;
-            }
-        });
-    }
-    catch (_a) {
-        (error) => { console.log(error); };
-    }
     // Resizing logic
     function handleResize(event, cornerIndex) {
         event.preventDefault();
@@ -122,22 +99,28 @@ function logBoxPosition(box) {
             }
             // Re-position corners dynamically
             logBoxPosition(box);
+            const onsizer = (event) => {
+                if (!sizer.contains(event.target)) {
+                    console.log('removing');
+                    sizer.remove();
+                }
+                console.log('passed');
+                document.removeEventListener('mouseup', onsizer);
+            };
+            console.log("here");
+            document.addEventListener("mousedown", onsizer);
         }
         function stopResize() {
-            document.removeEventListener('mousemove', resize);
-            document.removeEventListener('mouseup', stopResize);
+            document.removeEventListener("mousemove", resize);
+            document.removeEventListener("mouseup", stopResize);
         }
-        document.addEventListener('mousemove', resize);
-        document.addEventListener('mouseup', stopResize);
+        document.addEventListener("mousemove", resize);
+        document.addEventListener("mouseup", stopResize);
     }
     // Attach resize handlers to corners
     corners.forEach((corner, index) => {
-        corner.addEventListener('mousedown', (event) => handleResize(event, index));
+        corner.addEventListener("mousedown", (event) => handleResize(event, index));
     });
-    // corners.forEach((corner, index) => {
-    //     corner.addEventListener('mousedown', (event) => {
-    //     });
-    // });
     // Box moving logic
     function handleMove(event) {
         event.preventDefault();
@@ -154,55 +137,58 @@ function logBoxPosition(box) {
             logBoxPosition(box);
         }
         function stopMove() {
-            document.removeEventListener('mousemove', move);
-            document.removeEventListener('mouseup', stopMove);
+            document.removeEventListener("mousemove", move);
+            document.removeEventListener("mouseup", stopMove);
         }
-        document.addEventListener('mousemove', move);
-        document.addEventListener('mouseup', stopMove);
+        document.addEventListener("mousemove", move);
+        document.addEventListener("mouseup", stopMove);
     }
     // Attach move handler to the box itself
-    box.addEventListener('mousedown', handleMove);
-    // Event listener to remove sizer when clicking outside
+    box.addEventListener("mousedown", handleMove);
+    // // Event listener to remove sizer when clicking outside
     const handleClickOutside = (event) => {
-        if (!box.contains(event.target) && !sizer.contains(event.target)) {
+        if (!box.contains(event.target) &&
+            !sizer.contains(event.target)) {
             sizer.remove();
-            document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener("click", handleClickOutside);
         }
     };
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 }
 // Ensure the box element exists before adding event listener
-// if (box) {
-//     box.addEventListener('click', (event) => {
-//         event.stopPropagation();
-//         logBoxPosition(box);
-//     });
-// } else {
-//     console.error('Box element not found');
-// }
-function logBoxPositionHover(box) {
+if (box) {
+    box.addEventListener("click", (event) => {
+        event.stopPropagation();
+        logBoxPosition(box);
+    });
+}
+else {
+    console.error("Box element not found");
+}
+function logBoxPositionHover(event, box) {
     if (!box) {
-        console.error('Box element not found');
+        console.error("Box element not found");
         return;
     }
     const computedStyle = window.getComputedStyle(box);
-    const container = document.querySelector('.container');
-    const borderSizer = document.createElement('div');
-    const sizer = document.createElement('div');
+    const container = document.querySelector(".container");
+    const sizer = document.createElement("div");
+    sizer.classList.add("sizer");
+    const borderSizer = document.createElement("div");
     container.appendChild(sizer);
     // Create a borderSizer for the main border
     sizer.appendChild(borderSizer);
     // Style the sizer
-    borderSizer.style.position = 'absolute';
+    borderSizer.style.position = "absolute";
     borderSizer.style.height = computedStyle.height;
     borderSizer.style.width = computedStyle.width;
-    borderSizer.style.border = '2px solid rgb(18, 143, 233)';
+    borderSizer.style.border = "2px solid rgb(18, 143, 233)";
+    const offset = calculateOffset(box);
+    borderSizer.style.left = `${offset.left}px`;
+    borderSizer.style.top = `${offset.top}px`;
 }
-// box.addEventListener('mouseover',(event)=>{
-//     event.stopPropagation();
-//     logBoxPositionHover(box)
-// })
-box.addEventListener('click', (event) => {
-    event.stopPropagation();
-    logBoxPosition(box);
-});
+// box.addEventListener("click", (event) => {
+//   event.stopPropagation();
+//   logBoxPosition(box);
+// });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
