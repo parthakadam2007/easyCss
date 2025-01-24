@@ -1,0 +1,229 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+    color: #000;
+}
+.head{
+    height: 50px;
+    display: flex;
+}
+.head-logo{
+    margin-right: 450px;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    /* border: 1px solid #ddd; */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Left Section */
+.left-section {
+    background-image: url("background.png");
+    background-size: cover;
+    color: #fff;
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.left-section h1 {
+    font-size: 55px;
+    margin-top: 150px;
+    margin-bottom: 20px;
+    color: rgb(246, 249, 252);
+    font-family: "Ubuntu", serif;
+}
+
+.left-section ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.left-section li {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: rgb(144, 146, 147);
+    display: flex;
+    align-items: center;
+}
+
+.left-section li i {
+    margin-right: 10px;
+}
+
+
+/* Right Section */
+.right-section {
+    flex: 1;
+    padding: 40px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+input {
+    height: 40px;
+    width: 380px;
+    padding: 10px;
+    background-color:rgb(243, 243, 243);
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
+    font-size: 12px;
+    border: none;
+}
+
+.password-wrapper {
+    position: relative;
+    /* display: flex; */
+}
+/* .toggle-password{
+    display: flex;
+    margin-bottom: 45px;
+} */
+
+.toggle-password {
+    position: absolute; 
+     top: 50%;
+     left: 120%;
+     right: 0px; 
+    transform: translateY(-50%);
+    cursor: pointer;
+    /* font-size: 20px; */
+    color: rgb(243, 243, 243);
+
+}
+
+.toggle-password img {
+    width: 24px;
+    height: 24px;
+}
+
+.login-btn {
+    /* width: 100%; */
+    width: 400px;
+    padding: 10px;
+    background-color: #ff7f50;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #ff6347;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #007bff;
+    text-align: center;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Social Login */
+h3{
+    font-size: 24px;
+    margin-bottom: 50px;
+}
+.social-login {
+    width: 400px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.social-login button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background-color:rgb(243, 243, 243);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.button:hover{
+    background-color: rgb(232, 227, 227);
+}
+
+.social-login button img {
+    width: 16px;
+    height: 16px;
+}
+
+.social-login button:hover {
+    background-color: #eaeaea;
+}
+
+.signup-text {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.signup-text a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.signup-text a:hover {
+    text-decoration: underline;
+}
+
+.privacy-notice {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+}
+
+.privacy-notice a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.privacy-notice a:hover {
+    text-decoration: underline;
+}
