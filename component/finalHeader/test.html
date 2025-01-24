@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./designHeader.css">
+</head>
+<body>
+    <div id="contextMenu" class="context-menu">
+        <button onclick="bringToFront()">Bring to Front</button> <!-- New Button -->
+        <button onclick="sendToBack()">Send to Back</button> <!-- New Button -->
+    
+        <button onclick="deleteElement()">Delete</button>
+        <!-- Set the selected element as a parent -->
+    </div>
+
+    <div id="imageDialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; border: 1px solid #ccc; padding: 20px; z-index: 2000;">
+        <label for="imageUrl">Enter Image URL:</label>
+        <input type="text" id="imageUrl" style="width: 100%; margin: 10px 0;" />
+        <button onclick="addImageFromDialog()">Add Image</button>
+        <button onclick="closeImageDialog()">Cancel</button>
+      </div>
+
+    <div class="addToolbox">
+
+        <div id="controls">
+            <button onclick="addShape('circle')">Add Circle</button>
+            <button onclick="addShape('square')">Add Square</button>
+            <button onclick="addShape('rectangle')">Add Rectangle</button>
+            <button onclick="addShape('triangle')">Add Triangle</button>
+            <button onclick="addTextBox()">Add Text Box</button>
+            <button onclick="openImageDialog()">Add Image</button>
+
+        </div>
+    </div>
+
+<div class="sticky">layers 
+
+</div>
+
+<div class="sticky1">propertys
+<div class="section" id="userimgexport">
+    <div class="userimg">userimg</div>
+    <div class="export">export</div>
+
+</div>
+<div class="shapeElement">
+    <div class="postion">
+
+        <div class="alignment">
+            <div class="verticle-aligment">
+                <div class="top">top</div>
+                <div class="verticalcenter">vc</div>
+                <div class="bottom">b</div>
+
+            </div>
+      <div class="horizontal-aligment">
+        <div class="left">l</div>
+        <div class="horizontalcenter">hc</div>
+        <div class="right">r</div>
+      </div>
+
+        </div>
+
+        <div class="position">
+            <div class="xposition">xposition</div>
+            <div class="yposition">yposition</div>
+        </div>
+        <div class="transform">
+            <div class="rotate">rotate</div>
+            <div class="rotatefix">
+            <div class="rotate90">rotate90</div>
+            <div class="flip-vertical">flip-vertical</div>
+            <div class="flip-horihontal">flip-horihontal</div>
+
+            </div>
+               
+        </div>
+    </div>
+
+    <div class="layout">
+        <div>layout</div>
+        <div class="width">width</div>
+        <div class="height">height</div>
+    </div>
+
+    <div class="appearance">
+        <div class="opacity">opacity</div>
+        <div class="corner-radius">corner-radius</div>
+    </div>
+
+    <div class="stroke">
+        <div class="border-color">border-color</div>
+        <div class="border-width"></div>
+        <div class="border-style"> 
+            <!-- drop down   -->
+            <div class="solid">solid</div>
+            <div class="dotted">dotted</div>
+            <div class="dashed">dashed</div>
+        </div>
+  
+</div>
+
+<div class="effects">
+    <div>effects</div>
+    <div class="shadow">
+        <div class="shadow-color"></div>
+        <div class="shadow-x"></div>
+        <div class="shadow-y"></div>
+        <div class="shadow-blur"></div>
+    </div>
+    <div class="filter">
+        <div class="filter-blur"></div>
+        <div class="filter-brightness"></div>
+        <div class="filter-contrast"></div>
+        <div class="filter-grayscale"></div>
+        <div class="filter-hue-rotate"></div>
+        <div class="filter-invert"></div>
+        <div class="filter-opacity"></div>
+        <div class="filter-saturate"></div>
+        <div class="filter-sepia"></div>
+    </div>
+</div>
+</div>
+</div>
+    <!-- <textarea id="output" readonly></textarea> -->
+  </div>
+
+  <div class="zoom-container" id="zoomContainer">
+    <div id="headerPreview" class="header">
+          <!-- Draggable and editable header title -->
+          <h1 class="draggable" contenteditable="true" style="top: 10px; left: 50px; font-size: 24px; font-weight: bold;">Header Title</h1>
+          <!-- Draggable and editable header subtitle -->
+          <p class="draggable" contenteditable="true" style="top: 60px; left: 50px; font-size: 16px;">Header Subtitle</p>
+      </div>
+    </div>
+    
+
+
+
+    <script>
+        "use strict";
+// Select the header preview and output text area
+const headerPreview = document.getElementById('headerPreview');
+const outputBox = document.getElementById('output');
+const contextMenu = document.getElementById('contextMenu');
+let targetElement = null; // Tracks the element being edited
+let parentElement = null; // Tracks the parent element
+let childElement = null; // Tracks the child element
+let zIndexCounter = 1000; // Initialize z-index counter
+// Update the output box with the generated HTML and inline CSS
+function updateOutput() {
+    const elements = [...headerPreview.children];
+    console.log('elements', elements);
+    const headerContent = elements.map(el => {
+        const clone = el.cloneNode(true); // Clone the element
+        clone.removeAttribute('contenteditable'); // Remove editing capability
+        clone.style.position = 'absolute'; // Retain absolute positioning
+        return clone.outerHTML; // Convert to HTML string
+    }).join('\n    ');
+    console.log('headerCon', headerContent);
+    const headerStyle = `
+           width: 100%;
+           min-height: 150px;
+           background-color: #f4f4f4;
+           padding: 20px;
+           position: relative;
+       `.trim();
+    const generatedCode = `
+<header style="${headerStyle}">
+${headerContent}
+</header>`;
+    outputBox.value = generatedCode.trim(); // Display the code
+}
+function addTextBox() {
+    const newTextBox = document.createElement('div'); // Create a new div
+    newTextBox.classList.add('draggable'); // Add the draggable class
+    newTextBox.style.position = 'absolute';
+    newTextBox.style.top = '50px';
+    newTextBox.style.left = '50px';
+    newTextBox.style.width = '150px';
+    newTextBox.style.height = '50px';
+    newTextBox.style.border = '1px solid #000';
+    newTextBox.style.backgroundColor = '#fff';
+    newTextBox.style.color = '#000';
+    newTextBox.style.padding = '10px';
+    newTextBox.style.overflow = 'hidden';
+    newTextBox.contentEditable = 'true'; // Make it editable
+    makeDraggable(newTextBox); // Make the text box draggable
+    headerPreview.appendChild(newTextBox); // Add to the preview
+    updateOutput(); // Update the output code
+}
+// Function to add a shape
+function addShape(type) {
+    const newShape = document.createElement('div'); // Create a new div
+    newShape.classList.add('draggable', 'shape'); // Add relevant classes
+    newShape.style.position = 'absolute'; // Set initial position
+    newShape.style.top = '50px';
+    newShape.style.left = '50px';
+    // Style the shape based on the type
+    if (type === 'circle') {
+        newShape.style.width = '50px';
+        newShape.style.height = '50px';
+        newShape.style.borderRadius = '50%'; // Make it a circle
+        newShape.style.backgroundColor = 'blue';
+    }
+    else if (type === 'square') {
+        newShape.style.width = '50px';
+        newShape.style.height = '50px';
+        newShape.style.backgroundColor = 'blue';
+    }
+    else if (type === 'rectangle') {
+        newShape.style.width = '100px';
+        newShape.style.height = '50px';
+        newShape.style.backgroundColor = 'blue';
+    }
+    else if (type === 'triangle') {
+        newShape.style.width = '0';
+        newShape.style.height = '0';
+        newShape.style.borderLeft = '25px solid transparent';
+        newShape.style.borderRight = '25px solid transparent';
+        newShape.style.borderBottom = '50px solid blue';
+        newShape.style.backgroundColor = 'transparent';
+    }
+    makeDraggable(newShape); // Make the shape draggable
+    headerPreview.appendChild(newShape); // Add to the preview
+    updateOutput(); // Update the output code
+}
+// Function to make an element draggable
+function makeDraggable(el) {
+    el.addEventListener('mousedown', function (event) {
+        const rect = el.getBoundingClientRect();
+        const startX = (event.clientX - rect.left) / scale; // Adjust for scale
+        const startY = (event.clientY - rect.top) / scale; // Adjust for scale
+        function onMouseMove(e) {
+            // Calculate position considering scale and translations
+            const newLeft = (e.clientX - startX * scale - translateX + scrollX) / scale;
+            const newTop = (e.clientY - startY * scale - translateY + scrollY) / scale;
+            el.style.left = `${newLeft}px`;
+            el.style.top = `${newTop}px`;
+            updateOutput(); // Update output to reflect the new position
+        }
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+    // Show context menu on right-click
+    el.addEventListener('contextmenu', function (event) {
+        event.preventDefault(); // Prevent default menu
+        targetElement = el; // Set the target element
+        contextMenu.style.top = `${event.clientY}px`; // Position the menu
+        contextMenu.style.left = `${event.clientX}px`;
+        contextMenu.style.display = 'block'; // Show the menu
+    });
+}
+// Apply selected colors to the target element
+function applyColors() {
+    if (targetElement) {
+        const bgColor = document.getElementById('bgColor').value;
+        const textColor = document.getElementById('textColor').value;
+        targetElement.style.backgroundColor = bgColor;
+        targetElement.style.color = textColor;
+        contextMenu.style.display = 'none';
+        updateOutput();
+    }
+}
+// Hide the context menu when clicking outside
+document.addEventListener('click', function (e) {
+    if (!contextMenu.contains(e.target)) {
+        contextMenu.style.display = 'none';
+    }
+});
+// zoomContainer.addEventListener('keydown',(event)=>{
+//   if(KeyboardEvent==)
+//     console.log( event.target)
+// })
+// Delete the selected element on Ctrl + Delete
+function deleteElement() {
+    if (targetElement) {
+        targetElement.remove(); // Remove the selected element
+        targetElement = null; // Clear the reference
+        contextMenu.style.display = 'none'; // Hide the context menu if visible
+        updateOutput(); // Update the output code
+    }
+    else {
+        console.log('No element selected to delete.');
+    }
+}
+// Track the highest and lowest z-index values
+// Function to bring an element to the front
+function bringToFront() {
+    if (targetElement) {
+        zIndexCounter++; // Increment global z-index
+        targetElement.style.zIndex = zIndexCounter; // Assign new z-index
+        contextMenu.style.display = 'none'; // Hide context menu
+        console.log(`Element brought to front with zIndex: ${zIndexCounter}`);
+    }
+    else {
+        console.log("No element selected to bring to the front.");
+    }
+}
+// Function to send an element to the back
+function sendToBack() {
+    if (targetElement) {
+        targetElement.style.zIndex = 1; // Set a low z-index value
+        contextMenu.style.display = 'none'; // Hide context menu
+        console.log("Element sent to back with zIndex: 1");
+    }
+    else {
+        console.log("No element selected to send to the back.");
+    }
+}
+// Open the custom image dialog
+function openImageDialog() {
+    const imageDialog = document.getElementById('imageDialog');
+    const imageUrlInput = document.getElementById('imageUrl');
+    if (imageDialog && imageUrlInput) {
+        imageDialog.style.display = 'block'; // Show the dialog
+        imageUrlInput.value = ''; // Clear any previous value
+    }
+}
+// Close the custom image dialog
+function closeImageDialog() {
+    const imageDialog = document.getElementById('imageDialog');
+    if (imageDialog) {
+        imageDialog.style.display = 'none'; // Hide the dialog
+    }
+}
+// Add the image from the dialog input
+function addImageFromDialog() {
+    const imageUrlInput = document.getElementById('imageUrl');
+    const imageUrl = imageUrlInput === null || imageUrlInput === void 0 ? void 0 : imageUrlInput.value;
+    if (imageUrl) {
+        const newImage = document.createElement('img'); // Create a new image element
+        newImage.src = imageUrl;
+        newImage.alt = "User-added image";
+        Object.assign(newImage.style, {
+            position: 'absolute',
+            top: '50px',
+            left: '50px',
+            width: '150px', // Default size, can be resized by the user
+            height: 'auto',
+        });
+        newImage.classList.add('draggable'); // Add draggable class
+        makeDraggable(newImage); // Make the image draggable
+        headerPreview === null || headerPreview === void 0 ? void 0 : headerPreview.appendChild(newImage); // Add the image to the preview
+        updateOutput(); // Update the output code
+    }
+    closeImageDialog(); // Close the dialog after adding the image
+}
+// Make existing elements draggable
+document.querySelectorAll('.draggable').forEach(makeDraggable);
+// Update the output initially
+updateOutput();
+
+    </script>
+    <script>
+      "use strict";
+const box = document.querySelector(".box");
+console.log("running");
+// Function to calculate offset for positioning
+function calculateOffset(element) {
+    const position = element.getBoundingClientRect();
+    return {
+        left: position.left + window.scrollX - 10,
+        top: position.top + window.scrollY - 10,
+    };
+}
+// Function to add a sizer and corners around the box with resizing and moving functionality
+function logBoxPosition(box) {
+    if (!box) {
+        console.error("Box element not found");
+        return;
+    }
+    const computedStyle = window.getComputedStyle(box);
+    const container = document.querySelector(".container");
+    if (!container) {
+        console.error("Container element not found");
+        return;
+    }
+    const sizer = document.createElement("div");
+    sizer.classList.add("sizer");
+    container.appendChild(sizer);
+    // Create a borderSizer for the main border
+    const borderSizer = document.createElement("div");
+    sizer.appendChild(borderSizer);
+    // Create four corner elements
+    const corners = [];
+    for (let i = 0; i < 4; i++) {
+        const corner = document.createElement("div");
+        corner.classList.add("sizerCorner");
+        corner.style.position = "absolute";
+        corner.style.height = "15px";
+        corner.style.width = "15px";
+        corner.style.backgroundColor = "white";
+        corner.style.cursor = "pointer";
+        corner.style.border = "2px solid rgb(18, 143, 233)";
+        corners.push(corner);
+        sizer.appendChild(corner);
+    }
+    // Style the sizer
+    borderSizer.style.position = "absolute";
+    borderSizer.style.height = computedStyle.height;
+    borderSizer.style.width = computedStyle.width;
+    borderSizer.style.border = "2px solid rgb(18, 143, 233)";
+    // Use the calculateOffset function
+    const offset = calculateOffset(box);
+    borderSizer.style.left = `${offset.left}px`;
+    borderSizer.style.top = `${offset.top}px`;
+    // Position the corners at the border corners
+    const boxWidth = parseFloat(computedStyle.width);
+    const boxHeight = parseFloat(computedStyle.height);
+    corners[0].style.left = `${offset.left - 7.5}px`; // Top-left
+    corners[0].style.top = `${offset.top - 7.5}px`;
+    corners[1].style.left = `${offset.left + boxWidth - 7.5}px`; // Top-right
+    corners[1].style.top = `${offset.top - 7.5}px`;
+    corners[2].style.left = `${offset.left - 7.5}px`; // Bottom-left
+    corners[2].style.top = `${offset.top + boxHeight - 7.5}px`;
+    corners[3].style.left = `${offset.left + boxWidth - 7.5}px`; // Bottom-right
+    corners[3].style.top = `${offset.top + boxHeight - 7.5}px`;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // let sizerCorner:null | Element= document.querySelector('.sizerCorner')
+    // Resizing logic
+    function handleResize(event, cornerIndex) {
+        event.preventDefault();
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const startWidth = parseFloat(computedStyle.width);
+        const startHeight = parseFloat(computedStyle.height);
+        const startLeft = parseFloat(computedStyle.left || `${box.offsetLeft}`);
+        const startTop = parseFloat(computedStyle.top || `${box.offsetTop}`);
+        function resize(event) {
+            const dx = event.clientX - startX;
+            const dy = event.clientY - startY;
+            switch (cornerIndex) {
+                case 0: // Top-left
+                    box.style.width = `${startWidth - dx}px`;
+                    box.style.height = `${startHeight - dy}px`;
+                    box.style.left = `${startLeft + dx}px`;
+                    box.style.top = `${startTop + dy}px`;
+                    break;
+                case 1: // Top-right
+                    box.style.width = `${startWidth + dx}px`;
+                    box.style.height = `${startHeight - dy}px`;
+                    box.style.top = `${startTop + dy}px`;
+                    break;
+                case 2: // Bottom-left
+                    box.style.width = `${startWidth - dx}px`;
+                    box.style.height = `${startHeight + dy}px`;
+                    box.style.left = `${startLeft + dx}px`;
+                    break;
+                case 3: // Bottom-right
+                    box.style.width = `${startWidth + dx}px`;
+                    box.style.height = `${startHeight + dy}px`;
+                    break;
+            }
+            // Re-position corners dynamically
+            logBoxPosition(box);
+            const onsizer = (event) => {
+                if (!sizer.contains(event.target)) {
+                    console.log('removing');
+                    sizer.remove();
+                }
+                console.log('passed');
+                document.removeEventListener('mouseup', onsizer);
+            };
+            console.log("here");
+            document.addEventListener("mousedown", onsizer);
+        }
+        function stopResize() {
+            document.removeEventListener("mousemove", resize);
+            document.removeEventListener("mouseup", stopResize);
+        }
+        document.addEventListener("mousemove", resize);
+        document.addEventListener("mouseup", stopResize);
+    }
+    // Attach resize handlers to corners
+    corners.forEach((corner, index) => {
+        corner.addEventListener("mousedown", (event) => handleResize(event, index));
+    });
+    // Box moving logic
+    function handleMove(event) {
+        event.preventDefault();
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const startLeft = parseFloat(computedStyle.left || `${box.offsetLeft}`);
+        const startTop = parseFloat(computedStyle.top || `${box.offsetTop}`);
+        function move(event) {
+            const dx = event.clientX - startX;
+            const dy = event.clientY - startY;
+            box.style.left = `${startLeft + dx}px`;
+            box.style.top = `${startTop + dy}px`;
+            // Re-position corners dynamically
+            logBoxPosition(box);
+        }
+        function stopMove() {
+            document.removeEventListener("mousemove", move);
+            document.removeEventListener("mouseup", stopMove);
+        }
+        document.addEventListener("mousemove", move);
+        document.addEventListener("mouseup", stopMove);
+    }
+    // Attach move handler to the box itself
+    box.addEventListener("mousedown", handleMove);
+    // // Event listener to remove sizer when clicking outside
+    const handleClickOutside = (event) => {
+        if (!box.contains(event.target) &&
+            !sizer.contains(event.target)) {
+            sizer.remove();
+            document.removeEventListener("click", handleClickOutside);
+        }
+    };
+    document.addEventListener("click", handleClickOutside);
+}
+// Ensure the box element exists before adding event listener
+if (box) {
+    box.addEventListener("click", (event) => {
+        event.stopPropagation();
+        logBoxPosition(box);
+    });
+}
+else {
+    console.error("Box element not found");
+}
+function logBoxPositionHover(event, box) {
+    if (!box) {
+        console.error("Box element not found");
+        return;
+    }
+    const computedStyle = window.getComputedStyle(box);
+    const container = document.querySelector(".container");
+    const sizer = document.createElement("div");
+    sizer.classList.add("sizer");
+    const borderSizer = document.createElement("div");
+    container.appendChild(sizer);
+    // Create a borderSizer for the main border
+    sizer.appendChild(borderSizer);
+    // Style the sizer
+    borderSizer.style.position = "absolute";
+    borderSizer.style.height = computedStyle.height;
+    borderSizer.style.width = computedStyle.width;
+    borderSizer.style.border = "2px solid rgb(18, 143, 233)";
+    const offset = calculateOffset(box);
+    borderSizer.style.left = `${offset.left}px`;
+    borderSizer.style.top = `${offset.top}px`;
+}
+// box.addEventListener("click", (event) => {
+//   event.stopPropagation();
+//   logBoxPosition(box);
+// });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    </script>
+    <script>
+      "use strict";
+const zoomContainer = document.getElementById('zoomContainer');
+if (!zoomContainer) {
+    throw new Error("Element with ID 'zoomContainer' not found.");
+}
+let scale = 1; // Initial zoom scale
+let translateX = 0;
+let translateY = 0;
+let scrollX = 0; // Horizontal scroll position
+let scrollY = 0; // Vertical scroll position
+// Prevent default browser zoom behavior and handle custom zoom/scroll
+window.addEventListener('wheel', (event) => {
+    if (event.ctrlKey) {
+        event.preventDefault(); // Stop browser zoom
+        customZoom(event); // Call custom zoom function
+    }
+    else {
+        customScroll(event); // Handle vertical or horizontal scrolling
+    }
+}, { passive: false } // Allow preventDefault to work
+);
+function customZoom(event) {
+    // Calculate zoom factor
+    const zoomFactor = event.deltaY < 0 ? 1.1 : 0.9;
+    // Get cursor position relative to the zoom container
+    const rect = zoomContainer.getBoundingClientRect();
+    const cursorX = event.clientX - rect.left;
+    const cursorY = event.clientY - rect.top;
+    // Adjust scale and translation
+    const newScale = scale * zoomFactor;
+    translateX = cursorX - (cursorX - translateX) * (newScale / scale);
+    translateY = cursorY - (cursorY - translateY) * (newScale / scale);
+    scale = newScale;
+    // Apply transformations
+    zoomContainer.style.transform = `translate(${translateX - scrollX}px, ${translateY - scrollY}px) scale(${scale})`;
+}
+function customScroll(event) {
+    event.preventDefault(); // Prevent default scroll behavior
+    if (event.shiftKey) {
+        // Shift + Scroll: Horizontal scrolling
+        scrollX += event.deltaY;
+    }
+    else {
+        // Normal Scroll: Vertical scrolling
+        scrollY += event.deltaY;
+    }
+    // Apply scroll positions
+    zoomContainer.style.transform = `
+    translate(${translateX - scrollX}px, ${translateY - scrollY}px) scale(${scale})`;
+}
+
+    </script>
+</body>
+</html>

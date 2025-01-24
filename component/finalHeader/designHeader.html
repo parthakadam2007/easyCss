@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./designHeader.css">
+    <!-- <link rel="stylesheet" href="/easyCss/component/finalHeader/option.css"> -->
+    <link rel="stylesheet" href="/easyCss/component/finalHeader/sticky1.css">
+  
+</head>
+<body>
+    <div id="contextMenu" class="context-menu">
+        <button onclick="bringToFront()">Bring to Front</button> <!-- New Button -->
+        <button onclick="sendToBack()">Send to Back</button> <!-- New Button -->
+    
+        <button onclick="deleteElement()">Delete</button>
+        <!-- Set the selected element as a parent -->
+    </div>
+
+    <div id="imageDialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; border: 1px solid #ccc; padding: 20px; z-index: 2000;">
+        <label for="imageUrl">Enter Image URL:</label>
+        <input type="text" id="imageUrl" style="width: 100%; margin: 10px 0;" />
+        <button onclick="addImageFromDialog()">Add Image</button>
+        <button onclick="closeImageDialog()">Cancel</button>
+      </div>
+
+    <div class="addToolbox">
+
+        <div id="controls">
+            <button onclick="addShape('circle')">Add Circle</button>
+            <button onclick="addShape('square')">Add Square</button>
+            <button onclick="addShape('rectangle')">Add Rectangle</button>
+            <button onclick="addShape('triangle')">Add Triangle</button>
+            <button onclick="addTextBox()">Add Text Box</button>
+            <button onclick="openImageDialog()">Add Image</button>
+
+        </div>
+    </div>
+
+<div class="sticky">layers 
+
+</div>
+
+<div class="sticky1">propertys
+<div class="section" id="userimgexport">
+    <div class="userimg">userimg</div>
+    <div class="export">export</div>
+
+</div>
+<div class="shapeElement">
+    <div class="postion">
+
+        <div class="alignment">
+            <div class="verticle-aligment">
+                <div class="top">top</div>
+                <div class="verticalcenter">vc</div>
+                <div class="bottom">b</div>
+
+            </div>
+      <div class="horizontal-aligment">
+        <div class="left">l</div>
+        <div class="horizontalcenter">hc</div>
+        <div class="right">r</div>
+      </div>
+
+        </div>
+
+        <div class="position">
+            <div class="xposition">xposition</div>
+            <div class="yposition">yposition</div>
+        </div>
+        <div class="transform">
+            <div class="rotate">rotate</div>
+            <div class="rotatefix">
+            <div class="rotate90">rotate90</div>
+            <div class="flip-vertical">flip-vertical</div>
+            <div class="flip-horihontal">flip-horihontal</div>
+
+            </div>
+               
+        </div>
+    </div>
+
+    <div class="layout">
+        <div>layout</div>
+        <div class="width">width</div>
+        <div class="height">height</div>
+    </div>
+
+    <div class="appearance">
+        <div class="opacity">opacity</div>
+        <div class="corner-radius">corner-radius</div>
+    </div>
+
+    <div class="stroke">
+        <div class="border-color">border-color</div>
+        <div class="border-width"></div>
+        <div class="border-style"> 
+            <!-- drop down   -->
+            <div class="solid">solid</div>
+            <div class="dotted">dotted</div>
+            <div class="dashed">dashed</div>
+        </div>
+  
+</div>
+
+<div class="effects">
+    <div>effects</div>
+    <div class="shadow">
+        <div class="shadow-color"></div>
+        <div class="shadow-x"></div>
+        <div class="shadow-y"></div>
+        <div class="shadow-blur"></div>
+    </div>
+    <div class="filter">
+        <div class="filter-blur"></div>
+        <div class="filter-brightness"></div>
+        <div class="filter-contrast"></div>
+        <div class="filter-grayscale"></div>
+        <div class="filter-hue-rotate"></div>
+        <div class="filter-invert"></div>
+        <div class="filter-opacity"></div>
+        <div class="filter-saturate"></div>
+        <div class="filter-sepia"></div>
+    </div>
+</div>
+</div>
+</div>
+    <!-- <textarea id="output" readonly></textarea> -->
+  </div>
+
+  <div class="zoom-container" id="zoomContainer">
+    <div id="headerPreview" class="header">
+          <!-- Draggable and editable header title -->
+          <h1 class="draggable" contenteditable="true" style="top: 10px; left: 50px; font-size: 24px; font-weight: bold;">Header Title</h1>
+          <!-- Draggable and editable header subtitle -->
+          <p class="draggable" contenteditable="true" style="top: 60px; left: 50px; font-size: 16px;">Header Subtitle</p>
+      </div>
+    </div>
+    
+
+
+
+    <script src="/easyCss/dist/addElemetLogic.js"></script>
+<script src="/easyCss/dist/propertyElementLogic.js"></script>
+<script src="/easyCss/dist/zoomLogic.js"></script>
+<script>
+
+</script>
+</body>
+</html>

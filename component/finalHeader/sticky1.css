@@ -1,0 +1,110 @@
+:root {
+    --sticky-bg-color: #f9f9f9;
+    --sticky-border-color: #ccc;
+    --sticky-btn-bg: #007bff;
+    --sticky-btn-hover-bg: #0056b3;
+    --sticky-text-color: #000;
+    --sticky-padding: 20px;
+}
+
+.sticky1 {
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    width: 300px;
+    height: auto;
+    background-color: var(--sticky-bg-color);
+    border: 1px solid var(--sticky-border-color);
+    border-radius: 8px;
+    padding: var(--sticky-padding);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    z-index: 2000;
+}
+
+.sticky1 .section {
+    margin-bottom: 20px;
+}
+
+.sticky1 div {
+    margin-bottom: 10px;
+}
+
+.sticky1 .alignment div,
+.sticky1 .rotatefix div,
+.sticky1 .horizontal-aligment div,
+.sticky1 .verticle-aligment div {
+    display: inline-block;
+    width: 30%;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #e6e6e6;
+    border-radius: 4px;
+    margin: 2px;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+
+.sticky1 .alignment div:hover,
+.sticky1 .rotatefix div:hover {
+    background-color: #d4d4d4;
+}
+
+.sticky1 .alignment div.active,
+.sticky1 .rotatefix div.active {
+    background-color: var(--sticky-btn-hover-bg);
+    color: rgb(0, 0, 0);
+}
+
+.sticky1 .layout,
+.sticky1 .appearance,
+.sticky1 .effects,
+.sticky1 .stroke {
+    padding: 10px 0;
+}
+
+.sticky1 input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid var(--sticky-border-color);
+    border-radius: 4px;
+}
+
+.sticky1 button {
+    padding: 8px 12px;
+    background-color: var(--sticky-btn-bg);
+    color: var(--sticky-text-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.sticky1 button:hover {
+    background-color: var(--sticky-btn-hover-bg);
+    color: rgb(0, 0, 0);
+}
+
+.sticky1>* {
+    color: rgb(0, 0, 0);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .sticky1 {
+        width: 90%;
+        top: 10px;
+        right: 5%;
+        padding: 15px;
+    }
+
+    .sticky1 .alignment div,
+    .sticky1 .rotatefix div,
+    .sticky1 .horizontal-aligment div,
+    .sticky1 .verticle-aligment div {
+        width: 45%;
+    }
+}

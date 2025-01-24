@@ -101,10 +101,55 @@ document.querySelector('.right').onclick = () => alignElement('right');
 document.querySelector('.verticalcenter').onclick = () => alignElement('vertical-center');
 document.querySelector('.horizontalcenter').onclick = () => alignElement('horizontal-center');
 
-document.querySelector('.rotate90').onclick = () => rotateElement(90);
+document.querySelector('.rotate90').onclick = () => {
+    if (!selectedElement) return;
+    const currentRotation = selectedElement.style.transform.match(/rotate\((\d+)deg\)/);
+    const currentAngle = currentRotation ? parseInt(currentRotation[1]) : 0;
+    const newAngle = currentAngle + 90;
+    selectedElement.style.transform = `rotate(${newAngle}deg)`;
+};
+
 document.querySelector('.flip-vertical').onclick = () => flipElement('vertical');
 document.querySelector('.flip-horihontal').onclick = () => flipElement('horizontal');
+// Function to load current properties of the selected element
+const loadElementProperties = () => {
+    if (!selectedElement) return;
 
+    // Load position
+    document.querySelector('.xposition').textContent = `X: ${selectedElement.style.left || 0}`;
+    document.querySelector('.yposition').textContent = `Y: ${selectedElement.style.top || 0}`;
+
+    // Load size
+    document.querySelector('.width').textContent = `Width: ${selectedElement.style.width || selectedElement.offsetWidth}px`;
+    document.querySelector('.height').textContent = `Height: ${selectedElement.style.height || selectedElement.offsetHeight}px`;
+
+    // Load appearance
+    document.querySelector('.opacity').textContent = `Opacity: ${selectedElement.style.opacity || 1}`;
+    document.querySelector('.corner-radius').textContent = `Corner Radius: ${selectedElement.style.borderRadius || 0}px`;
+
+    // Load border
+    document.querySelector('.border-color').textContent = `Border Color: ${selectedElement.style.borderColor || 'none'}`;
+    document.querySelector('.border-width').textContent = `Border Width: ${selectedElement.style.borderWidth || 'none'}`;
+    document.querySelector('.border-style').textContent = `Border Style: ${selectedElement.style.borderStyle || 'none'}`;
+
+    // Load shadow
+    document.querySelector('.shadow-color').textContent = `Shadow: ${selectedElement.style.boxShadow || 'none'}`;
+
+    // Load filters
+    document.querySelector('.filter-blur').textContent = `Blur: ${selectedElement.style.filter.match(/blur\(([^)]+)\)/)?.[1] || '0px'}`;
+    document.querySelector('.filter-brightness').textContent = `Brightness: ${selectedElement.style.filter.match(/brightness\(([^)]+)\)/)?.[1] || '1'}`;
+    document.querySelector('.filter-contrast').textContent = `Contrast: ${selectedElement.style.filter.match(/contrast\(([^)]+)\)/)?.[1] || '1'}`;
+    document.querySelector('.filter-grayscale').textContent = `Grayscale: ${selectedElement.style.filter.match(/grayscale\(([^)]+)\)/)?.[1] || '0%'}`;
+    document.querySelector('.filter-sepia').textContent = `Sepia: ${selectedElement.style.filter.match(/sepia\(([^)]+)\)/)?.[1] || '0%'}`;
+};
+
+// Attach event listener to load properties when an element is selected
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('draggable')) {
+        selectedElement = e.target;
+        loadElementProperties();
+    }
+});
 document.querySelector('.width').onclick = () => resizeElement('width', 200);
 document.querySelector('.height').onclick = () => resizeElement('height', 200);
 
@@ -122,3 +167,4 @@ document.querySelector('.filter-brightness').onclick = () => applyFilter('bright
 document.querySelector('.filter-contrast').onclick = () => applyFilter('contrast', '2');
 document.querySelector('.filter-grayscale').onclick = () => applyFilter('grayscale', '100%');
 document.querySelector('.filter-sepia').onclick = () => applyFilter('sepia', '100%');
+

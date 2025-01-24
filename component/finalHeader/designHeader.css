@@ -1,0 +1,139 @@
+body {
+    margin: 0;
+    overflow: hidden; /* Prevent default scrollbars */
+    font-family: Arial, sans-serif;
+  }
+  body{
+    background-color: rgb(30, 30, 30);
+
+  }
+
+  .zoom-container {
+    transform: translate(337.594px, 92.9699px) scale(0.531441);
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    transform-origin: 0 0; /* Set origin for scaling */
+  }
+  .addToolbox{
+    position: fixed;
+    z-index: 999999999;
+    bottom: 50px;
+    left: 35%;
+    background-color: #007BFF;
+    height: 50px;
+ 
+  }
+  .section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+ margin: 5px;
+ padding: 5px;
+    border-bottom: 2px solid #007BFF;
+  }
+  
+  .controls{
+    display: flex;
+    /* align-self: center; */
+    justify-content: center;
+    align-items: center;
+    background-color: #007BFF;
+  }
+  .sticky{
+    /* position: static; */
+    position: fixed;
+    z-index: 9999999;
+
+    font-family : arial; font-size: 16px; background-color: rgb(44, 44, 44); color: rgb(228, 228, 228); text-align: center; vertical-align: middle; padding: 16px; margin: 0px; height: 100%; width: 15%; border-style:solid ; border-width:1px; border-radius: 0%;
+    border-color: rgb(66, 66, 66);
+
+  }
+  .sticky1{
+    /* position: static; */
+    position: fixed;
+    z-index: 9999999;
+    right: 0;
+    font-family : arial; font-size: 16px; background-color: rgb(44, 44, 44); color: rgb(228, 228, 228); text-align: center; vertical-align: middle; padding: 16px; margin: 0px; height: 100%; width: 15%; border-style:solid ; border-width:1px; border-radius: 0%;
+    border-color: rgb(66, 66, 66);
+  }
+  .box {
+          box-sizing: content-box;
+          height: 500px;
+          width: 500px;
+          background-color: rgb(184, 184, 184);
+          /* background-color: blue; */
+          position: absolute;
+          left: 50px;
+          top: 50px;
+          /* transform: translateX(-50%); */
+      }
+      
+
+
+/*   /////////////////////////////////////////////////////////////////////// */
+.header {
+          width: 100%; /* The header spans the full width */
+          min-height: 150px; /* Minimum height for the header */
+          background-color: #ffffff; /* Light gray background for the header */
+          padding: 20px; /* Padding inside the header */
+          position: relative; /* Enables absolutely positioned children */
+      }
+
+      .draggable {
+          position: absolute; /* Enables positioning within the parent container */
+          cursor: grab; /* Shows the draggable cursor */
+      }
+
+      .draggable:active {
+          cursor: grabbing; /* Change cursor while dragging */
+      }
+
+      .shape {
+          background-color: #007BFF; /* Default blue background for shapes */
+          color: white; /* White text color for contrast */
+          display: flex; /* Flexbox for centering content */
+          justify-content: center;
+          align-items: center;
+          text-align: center; /* Center text inside shapes */
+      }
+
+      textarea#output {
+          width: 100%; /* Full-width textarea */
+          height: 300px; /* Fixed height for the textarea */
+          font-family: monospace; /* Monospace font for code readability */
+          margin-top: 20px; /* Space above the textarea */
+          font-size: 14px; /* Font size for the code */
+          padding: 10px; /* Inner padding for better visibility */
+          box-sizing: border-box; /* Include padding in width calculation */
+      }
+
+      #controls {
+          margin-top: 20px; /* Space above the controls */
+      }
+
+      .context-menu {
+          position: absolute; /* Context menu is absolutely positioned */
+          display: none; /* Hidden by default */
+          background-color: white; /* White background for visibility */
+          border: 1px solid #ccc; /* Light border for separation */
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+         /* Subtle shadow for depth */
+
+          z-index: 1000; /* Ensures menu is on top of other elements */
+          padding: 10px; /* Space inside the menu */
+      }
+
+      .context-menu input[type="color"] {
+          margin-bottom: 5px; /* Space between inputs */
+          width: 100%; /* Full-width color input */
+      }
+
+      .context-menu button {
+          width: 100%; /* Full-width buttons */
+          padding: 5px; /* Inner padding for buttons */
+          margin-top: 5px; /* Space above each button */
+      }

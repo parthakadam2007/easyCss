@@ -91,6 +91,7 @@ ${headerContent}
        headerPreview.appendChild(newShape); // Add to the preview
        updateOutput(); // Update the output code
    }
+   
 
    // Function to make an element draggable
    function makeDraggable(el) {
@@ -192,6 +193,51 @@ function sendToBack() {
    } else {
        console.log("No element selected to send to the back.");
    }
+}
+
+// Open the custom image dialog
+function openImageDialog(): void {
+    const imageDialog = document.getElementById('imageDialog') as HTMLElement;
+    const imageUrlInput = document.getElementById('imageUrl') as HTMLInputElement;
+
+    if (imageDialog && imageUrlInput) {
+        imageDialog.style.display = 'block'; // Show the dialog
+        imageUrlInput.value = ''; // Clear any previous value
+    }
+}
+
+// Close the custom image dialog
+function closeImageDialog(): void {
+    const imageDialog = document.getElementById('imageDialog') as HTMLElement;
+    if (imageDialog) {
+        imageDialog.style.display = 'none'; // Hide the dialog
+    }
+}
+
+// Add the image from the dialog input
+function addImageFromDialog(): void {
+    const imageUrlInput = document.getElementById('imageUrl') as HTMLInputElement;
+    const imageUrl = imageUrlInput?.value;
+
+    if (imageUrl) {
+        const newImage = document.createElement('img'); // Create a new image element
+        newImage.src = imageUrl;
+        newImage.alt = "User-added image";
+        Object.assign(newImage.style, {
+            position: 'absolute',
+            top: '50px',
+            left: '50px',
+            width: '150px', // Default size, can be resized by the user
+            height: 'auto',
+        });
+
+        newImage.classList.add('draggable'); // Add draggable class
+        makeDraggable(newImage); // Make the image draggable
+        headerPreview?.appendChild(newImage); // Add the image to the preview
+        updateOutput(); // Update the output code
+    }
+
+    closeImageDialog(); // Close the dialog after adding the image
 }
 
 

@@ -172,6 +172,44 @@ function sendToBack() {
         console.log("No element selected to send to the back.");
     }
 }
+// Open the custom image dialog
+function openImageDialog() {
+    const imageDialog = document.getElementById('imageDialog');
+    const imageUrlInput = document.getElementById('imageUrl');
+    if (imageDialog && imageUrlInput) {
+        imageDialog.style.display = 'block'; // Show the dialog
+        imageUrlInput.value = ''; // Clear any previous value
+    }
+}
+// Close the custom image dialog
+function closeImageDialog() {
+    const imageDialog = document.getElementById('imageDialog');
+    if (imageDialog) {
+        imageDialog.style.display = 'none'; // Hide the dialog
+    }
+}
+// Add the image from the dialog input
+function addImageFromDialog() {
+    const imageUrlInput = document.getElementById('imageUrl');
+    const imageUrl = imageUrlInput === null || imageUrlInput === void 0 ? void 0 : imageUrlInput.value;
+    if (imageUrl) {
+        const newImage = document.createElement('img'); // Create a new image element
+        newImage.src = imageUrl;
+        newImage.alt = "User-added image";
+        Object.assign(newImage.style, {
+            position: 'absolute',
+            top: '50px',
+            left: '50px',
+            width: '150px', // Default size, can be resized by the user
+            height: 'auto',
+        });
+        newImage.classList.add('draggable'); // Add draggable class
+        makeDraggable(newImage); // Make the image draggable
+        headerPreview === null || headerPreview === void 0 ? void 0 : headerPreview.appendChild(newImage); // Add the image to the preview
+        updateOutput(); // Update the output code
+    }
+    closeImageDialog(); // Close the dialog after adding the image
+}
 // Make existing elements draggable
 document.querySelectorAll('.draggable').forEach(makeDraggable);
 // Update the output initially
